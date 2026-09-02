@@ -829,7 +829,7 @@
         "<span class='pill'>" + c.bottles + "</span></div>" +
         "<p class='tile-desc'>" + c.desc + "</p>" +
         (c.clip || c.vimeo ? "<button class='watch-btn'>&#9654;&nbsp; Watch a tasting</button>" : "") +
-        "<a class='tile-btn' href='" + CLUB_PAGE_URL.replace("{slug}", c.slug) + "' target='_blank' rel='noopener'>Select This Club</a>" +
+        "<a class='tile-btn' data-club='" + r.key + "' href='" + CLUB_PAGE_URL.replace("{slug}", c.slug) + "' target='_blank' rel='noopener'>Select This Club</a>" +
         "</div>" +
         (c.clip || c.vimeo ? "<div class='tile-face tile-back'>" +
           (USE_VIMEO && c.vimeo
@@ -868,6 +868,16 @@
     });
     document.querySelectorAll(".tile-back").forEach(bk => {
       bk.onclick = () => unflip(bk.closest(".tile"));
+    });
+    document.querySelectorAll(".tile-btn").forEach(a => {
+      a.addEventListener("click", () => {
+        try {
+          const fd = new URLSearchParams();
+          fd.append(GFORM.fields.email, quizEmail || "");
+          fd.append(GFORM.fields.answers_json, JSON.stringify({ event: "select_click", club: a.dataset.club }));
+          fetch(GFORM.action, { method: "POST", mode: "no-cors", headers: { "Content-Type": "application/x-www-form-urlencoded" }, body: fd.toString() });
+        } catch (e) {}
+      });
     });
     document.querySelectorAll(".mute-btn").forEach(m => {
       m.onclick = e => {
