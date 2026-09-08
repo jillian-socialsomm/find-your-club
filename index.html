@@ -390,6 +390,11 @@
      quiz lives in Bubble. The claude.ai artifact version cannot
      send data out (sandbox blocks external requests).
 
+     NOTE (added 2026-09-08): when the quiz is hosted on GitHub Pages,
+     the point values are OVERRIDDEN at page load by weights.json in
+     the same repo - edit THAT file on GitHub to change live scoring.
+     The values below are the fallback (and what local/artifact use).
+
      HOW TO PLAY WITH IT:
        1. Edit numbers/text below and save (careful with the
           punctuation — every { } , " needs its partner)
@@ -621,6 +626,23 @@
   ];
 
   /* ============== END OF RUBRIC — no need to edit below ============== */
+
+  // Load scoring weights from weights.json (same folder). Lets weights be
+  // edited on GitHub without touching this file. On any failure (offline,
+  // file missing, claude.ai sandbox) the embedded points above stay in force.
+  fetch("weights.json", { cache: "no-store" })
+    .then(r => (r.ok ? r.json() : null))
+    .then(w => {
+      if (!w) return;
+      ["q1", "q2", "q3", "q4", "q5"].forEach((k, qi) => {
+        if (Array.isArray(w[k]) && w[k].length === QUESTIONS[qi].answers.length) {
+          w[k].forEach((pts, ai) => {
+            if (pts && typeof pts === "object") QUESTIONS[qi].answers[ai].points = pts;
+          });
+        }
+      });
+    })
+    .catch(() => {});
 
   const state = QUESTIONS.map(q => q.type === "multi3" ? new Set() : null);
   const container = document.getElementById("screens");
