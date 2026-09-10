@@ -1,11 +1,12 @@
 {
   "_comment": "Scoring weights for the Find Your Club quiz. One object per answer, in on-screen order. Keys: sarah, madison, jason, vince, tps, hillary, grapechic, sss. Negative numbers subtract. Edit this file on GitHub and the live quiz picks it up on the next page load (after Pages redeploys, ~1 min).",
-  "version": "2026-09-08",
+  "version": "2026-09-10",
   "q1": [
     {
       "sarah": 2,
       "tps": 3,
-      "sss": 1
+      "sss": 1,
+      "madison": 1
     },
     {
       "sarah": 1,
@@ -89,8 +90,8 @@
   ],
   "q4": [
     {
-      "jason": 3,
-      "hillary": 1,
+      "jason": 4,
+      "hillary": 2,
       "madison": 1
     },
     {
