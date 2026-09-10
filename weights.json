@@ -1,6 +1,6 @@
 {
   "_comment": "Scoring weights for the Find Your Club quiz. One object per answer, in on-screen order. Keys: sarah, madison, jason, vince, tps, hillary, grapechic, sss. Negative numbers subtract. An empty object means the answer awards no points. Edit this file on GitHub and the live quiz picks it up on the next page load (after Pages redeploys, ~1 min).",
-  "version": "2026-09-10c",
+  "version": "2026-09-10d",
   "q1": [
     {
       "sarah": 2,
@@ -120,7 +120,7 @@
     },
     {
       "sarah": 2,
-      "hillary": 1,
+      "hillary": 2,
       "madison": 1,
       "sss": 3
     },

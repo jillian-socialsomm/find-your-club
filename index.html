@@ -366,7 +366,7 @@
 
      Question types:
        "single" = pick one, auto-advances
-       "multi3" = pick exactly 3, each pick scores
+       "multi3" = pick 1 to 3, each pick scores
        "slider" = snap slider; answers run left-to-right, any count
                   (currently 5: classics, halfway, don't care,
                    halfway, rule breakers)
@@ -583,7 +583,7 @@
     {
       type: "multi3",
       title: "What are you looking for from your club?",
-      helper: "Choose your top 3",
+      helper: "Choose up to 3",
       answers: [
         { text: "Get access to trending wines", points: { madison: 3 } },
         { text: "Expand my wine horizons and learn", points: { sarah: 3, vince: 3, grapechic: 2, hillary: 1, jason: 1 } },
@@ -611,7 +611,7 @@
       type: "single",
       title: "How do you feel about natural and low intervention wines?",
       answers: [
-        { text: "Give me the natty funk", points: { jason: 4, hillary: 2, madison: 2 } },
+        { text: "I like a little natty funk", points: { jason: 4, hillary: 2, madison: 2 } },
         { text: "I like the good ones occasionally", points: { madison: 2, hillary: 2, vince: 1, jason: 2 } },
         { text: "I like my wines more conventional", points: { sarah: 2, tps: 2, grapechic: 1, vince: 1, jason: -1, hillary: -1 } },
         { text: "Open to trying!", points: { sss: 2, hillary: 1, madison: 1, sarah: 1 } }
@@ -622,7 +622,7 @@
       title: "How much do you want to spend on bottles?",
       answers: [
         { text: "Ultra-high value (usually <$20) to master the grocery store aisle", points: { tps: 3, grapechic: -2, vince: -2, jason: -2 } },
-        { text: "A mix: weeknight bangers (like $18-30) and the occasional splurge (like $40-50)", points: { sarah: 2, hillary: 1, madison: 1, sss: 3 } },
+        { text: "A mix: weeknight bangers (like $18-30) and the occasional splurge (like $40-50)", points: { sarah: 2, hillary: 2, madison: 1, sss: 3 } },
         { text: "Craft sippers to share ($20-40) plus special bottles to impress ($50+)", points: { grapechic: 2, jason: 1, madison: 1, vince: 2 } },
         { text: "Building out the cellar with storied picks ($40+)", points: { grapechic: 2, vince: 2, tps: -2 } }
       ]
@@ -691,7 +691,7 @@
     } else {
       inner += "<div class='answers' id='answers" + qi + "' role='" + (q.type === "single" ? "radiogroup" : "group") + "' aria-labelledby='q" + qi + "title'></div>";
       if (q.type === "multi3") {
-        inner += "<div class='footer-row'><span class='pick-note' id='pickNote" + qi + "'>0 of 3 selected</span>" +
+        inner += "<div class='footer-row'><span class='pick-note' id='pickNote" + qi + "'>0 selected (up to 3)</span>" +
           "<button class='btn' id='next" + qi + "' disabled>Next</button></div>";
       }
       if (qi > 0) {
@@ -797,8 +797,8 @@
               el.classList.toggle("selected", on);
               el.setAttribute("aria-pressed", on ? "true" : "false");
             });
-            document.getElementById("pickNote" + qi).textContent = set.size + " of 3 selected";
-            document.getElementById("next" + qi).disabled = set.size !== 3;
+            document.getElementById("pickNote" + qi).textContent = set.size + " selected (up to 3)";
+            document.getElementById("next" + qi).disabled = set.size === 0;
           }
         };
         wrap.appendChild(b);
@@ -970,7 +970,7 @@
     QUESTIONS.forEach((q, qi) => {
       if (q.type === "multi3") {
         state[qi].clear();
-        document.getElementById("pickNote" + qi).textContent = "0 of 3 selected";
+        document.getElementById("pickNote" + qi).textContent = "0 selected (up to 3)";
         document.getElementById("next" + qi).disabled = true;
         [...document.getElementById("answers" + qi).children].forEach(el => {
           el.classList.remove("selected"); el.setAttribute("aria-pressed", "false");
