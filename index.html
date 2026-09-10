@@ -559,6 +559,10 @@
   // embedded 2-second preview clips.
   const USE_VIMEO = location.protocol === "file:" ||
     ["localhost", "github.io", "socialsomm.com"].some(h => location.hostname === h || location.hostname.endsWith(h));
+  // Tie-break policy (Jill, 2026-09-10): a tie goes to the BIGGER club
+  // (by subscriber count as of 2026-09-10) - EXCEPT a tie for first place
+  // involving Sarah, which she loses (drops to second).
+  const SIZE_RANK = { sarah: 0, madison: 1, vince: 2, jason: 3, tps: 4, hillary: 5, grapechic: 6, sss: 7 };
   const ICON_SOUND = "<svg viewBox='0 0 24 24' fill='none' stroke='#fff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polygon points='11 5 6 9 2 9 2 15 6 15 11 19 11 5' fill='#fff'></polygon><path d='M15.5 8.5a5 5 0 0 1 0 7'></path><path d='M18.5 5.5a9 9 0 0 1 0 13'></path></svg>";
   const ICON_MUTED = "<svg viewBox='0 0 24 24' fill='none' stroke='#fff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polygon points='11 5 6 9 2 9 2 15 6 15 11 19 11 5' fill='#fff'></polygon><line x1='16' y1='9' x2='22' y2='15'></line><line x1='22' y1='9' x2='16' y2='15'></line></svg>";
   const ALL = Object.keys(CLUBS);
@@ -817,7 +821,10 @@
     });
 
     const ranked = ALL.map(k => ({ key: k, score: scores[k] }))
-      .sort((a, b) => b.score - a.score);
+      .sort((a, b) => b.score - a.score || SIZE_RANK[a.key] - SIZE_RANK[b.key]);
+    if (ranked[0].key === "sarah" && ranked[1].score === ranked[0].score) {
+      [ranked[0], ranked[1]] = [ranked[1], ranked[0]];
+    }
     let order = ranked.slice();
     if (state[4] === 0) {
       const forcedKey = (state[3] === 0 || state[3] === 1) ? "hillary" : "tps";
